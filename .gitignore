@@ -15,7 +15,7 @@ venv/
 env/
 .venv/
 .env/
-.env.example
+
 
 # Django
 *.log
@@ -35,6 +35,6 @@ media/
 node_modules/
 dist/
 .env
-.env.example
+
 *.log
 .DS_Store
