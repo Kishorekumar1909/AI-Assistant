@@ -37,3 +37,7 @@ dist/
 .env
 *.log
 .DS_Store
+
+# Django Migrations
+**/migrations/*.py
+!**/migrations/__init__.py
