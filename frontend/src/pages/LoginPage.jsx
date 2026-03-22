@@ -1,22 +1,23 @@
-import React, { useState } from "react";
+import React, { useState,useCallback,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Bot, Mail, Lock } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
-export default function LoginPage() {
+export default React.memo(function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
+  console.log(error)
+  const handleChange = useCallback((e) => {
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
-    setError("");
-  };
+    // setError("");
+  },[]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit =useCallback( async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -33,7 +34,7 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
-  };
+  },[]);
 
   return (
     <div className="auth-container">
@@ -108,3 +109,4 @@ export default function LoginPage() {
     </div>
   );
 }
+)

@@ -54,7 +54,7 @@ export default function Sidebar() {
           <div className="sidebar-logo-icon">
             <Bot size={18} color="#fff" />
           </div>
-          <span className="sidebar-logo-text">AI Chat</span>
+          <span className="sidebar-logo-text">AI Assistant</span>
         </div>
       </div>
 

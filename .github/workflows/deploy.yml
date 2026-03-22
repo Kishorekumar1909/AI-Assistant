@@ -1,0 +1,59 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Linux EC2
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            set -e
+
+            echo "Go to project directory"
+            cd /home/ubuntu/AI-Assistant
+
+            echo "Pull latest code"
+            git pull origin main
+
+            echo "===== BACKEND ====="
+            cd backend
+
+            echo "Install dependencies"
+            /home/ubuntu/AI-Assistant/backend/venv/bin/pip install -r requirements.txt
+
+            echo "Run make migrations"
+            /home/ubuntu/AI-Assistant/backend/venv/bin/python manage.py makemigrations
+
+            echo "Run migrations"
+            /home/ubuntu/AI-Assistant/backend/venv/bin/python manage.py migrate
+
+            echo "Restart Gunicorn"
+            sudo systemctl restart gunicorn
+
+            echo "===== FRONTEND ====="
+            cd ../frontend
+
+            echo "Install frontend dependencies"
+            npm install
+
+            echo "Build React app"
+            npm run build
+
+            echo "Move build to Nginx folder"
+            sudo rm -rf /var/www/react/*
+            sudo cp -r dist/* /var/www/react/
+
+            echo "Restart Nginx"
+            sudo systemctl restart nginx
+
+            echo "Deployment completed successfully 🚀"
