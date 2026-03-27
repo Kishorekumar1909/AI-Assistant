@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: linux-latest
 
     steps:
       - name: Deploy to Linux EC2
@@ -20,7 +20,7 @@ jobs:
             set -e
 
             echo "Go to project directory"
-            cd /home/ubuntu/AI-Assistant
+            cd /home/ec2-user/AI-Assistant
 
             echo "Pull latest code"
             git pull origin main
@@ -29,13 +29,13 @@ jobs:
             cd backend
 
             echo "Install dependencies"
-            /home/ubuntu/AI-Assistant/backend/venv/bin/pip install -r requirements.txt
+            /home/ec2-user/AI-Assistant/backend/venv/bin/pip install -r requirements.txt
 
             echo "Run make migrations"
-            /home/ubuntu/AI-Assistant/backend/venv/bin/python manage.py makemigrations
+            /home/ec2-user/AI-Assistant/backend/venv/bin/python manage.py makemigrations
 
             echo "Run migrations"
-            /home/ubuntu/AI-Assistant/backend/venv/bin/python manage.py migrate
+            /home/ec2-user/AI-Assistant/backend/venv/bin/python manage.py migrate
 
             echo "Restart Gunicorn"
             sudo systemctl restart gunicorn
