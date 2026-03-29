@@ -4,24 +4,27 @@ import { Bot, Mail, Lock } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
-export default React.memo(function LoginPage() {
+export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  console.log(error)
-  const handleChange = useCallback((e) => {
+  // console.log(error)
+  const handleChange = async (e) => {
+    e.preventDefault()
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+    // console.log(form)
     // setError("");
-  },[]);
+  };
 
-  const handleSubmit =useCallback( async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     try {
+      // console.log(form)
       await login(form);
       navigate("/");
     } catch (err) {
@@ -34,7 +37,7 @@ export default React.memo(function LoginPage() {
     } finally {
       setLoading(false);
     }
-  },[]);
+  };
 
   return (
     <div className="auth-container">
@@ -109,4 +112,3 @@ export default React.memo(function LoginPage() {
     </div>
   );
 }
-)
